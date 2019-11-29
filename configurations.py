@@ -1,10 +1,21 @@
+import os
+
+_reactivision_path = os.environ.get("REACTIVISION_PATH")
+if not _reactivision_path:
+	raise ValueError("REACTIVISION_PATH is required")
+
 class BaseCongig(object):
 	'''
 	Base config class
 	'''
 	DEBUG = True
 	TESTING = False
-	REACTIVISON_PATH = ''
+
+	REACTIVISION_PATH = _reactivision_path
+
+	@property
+	def SETTINGS_PATH(self):
+		return os.path.join(_reactivision_path, 'reacTIVision.xml')
 
 class ProductionConfig(BaseCongig):
 	"""
