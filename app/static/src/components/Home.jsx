@@ -1,9 +1,5 @@
 import React from 'react';
 
-const Home = () => {
-   return (
-      <h1>Test</h1>
-   )
-}
+const Home = () => <a href="/calibrate">calibrate</a>
 
 export default Home 

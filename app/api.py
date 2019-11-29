@@ -1,6 +1,7 @@
 from flask import render_template, Blueprint
-api_blueprint = Blueprint('views',__name__)
+from flask import current_app as app
+api_blueprint = Blueprint('api',__name__)
 
-@api_blueprint.route('/api/test')
-def test():
-	return ""
+@api_blueprint.route('/settings')
+def settings():
+	return str(app.config['DEBUG'])

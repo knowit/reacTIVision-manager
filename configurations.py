@@ -4,6 +4,7 @@ class BaseCongig(object):
 	'''
 	DEBUG = True
 	TESTING = False
+	REACTIVISON_PATH = ''
 
 class ProductionConfig(BaseCongig):
 	"""
