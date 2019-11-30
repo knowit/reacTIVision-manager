@@ -1,13 +1,13 @@
 from flask import Flask
+import pkgutil
+import importlib
+import app.blueprints as blueprints
+
 app = Flask(__name__,
  	static_folder = './public',
  	template_folder="./static")
 
-from app.views import views_blueprint
-app.register_blueprint(views_blueprint)
 
-from app.api import api_blueprint
-app.register_blueprint(api_blueprint, url_prefix="/api")
-
-from app.streamer import streamer_blueprint
-app.register_blueprint(streamer_blueprint)
+for _, modname, _ in pkgutil.iter_modules(blueprints.__path__):
+	m = importlib.import_module(f'app.blueprints.{modname}')
+	app.register_blueprint(m.blueprint, url_prefix=m.base_url if 'base_url' in vars(m) else None)

@@ -23,4 +23,5 @@ dependencies:
     - numpy==1.17.4
     - opencv-python==4.1.2.30
     - pillow==6.2.1
+    - psutil==5.6.7
 
