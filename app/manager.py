@@ -40,17 +40,17 @@ def is_running():
         return False
 
 
-
+def get_camera_settings_path(xml, config):
+    camera_tags = xml.getElementsByTagName('camera')
+    camera_settings_path = camera_tags[0].getAttribute('config') if camera_tags.length > 0 else 'default'
+    return camera_settings_path if camera_settings_path != 'default' else config['DEFAULT_CAMERA_SETTINGS_PATH']
 
 
 def load_settings(config):
     xml = parse(config['SETTINGS_PATH'])
 
-    camera_tags = xml.getElementsByTagName('camera')
-    camera_settings_path = camera_tags[0].getAttribute('config') if camera_tags.length > 0 else 'default'
-    camera_settings_path = camera_settings_path if camera_settings_path != 'default' else config['DEFAULT_CAMERA_SETTINGS_PATH']
-    
-    camera_xml = parse(camera_settings_path)
+    camera_xml = parse(get_camera_settings_path(xml, config))
+    # TODO: camera settings
 
     tuio_tags = xml.getElementsByTagName('tuio')
     fiducial = xml.getElementsByTagName('fiducial')
@@ -109,6 +109,8 @@ def save_settings(config, fiducial=None, connections=None, camera=None):
 
     with open(config['SETTINGS_PATH'], 'w') as xmlFile:
         xml.writexml(xmlFile)
+
+    # TODO: camera settings
 
     return True
 

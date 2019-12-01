@@ -2,11 +2,14 @@ import cv2
 import io
 from PIL import Image
 
-def get_camera():
+def get_camera(width, height):
     cam = cv2.VideoCapture(0)
     cam.set(cv2.CAP_PROP_FPS, 30)
-    cam.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    cam.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+    cam.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+    cam.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+    cam.set(cv2.CAP_PROP_AUTOFOCUS, 1)
+    cam.set(cv2.CAP_PROP_AUTO_WB, 1)
     return cam
 
 
