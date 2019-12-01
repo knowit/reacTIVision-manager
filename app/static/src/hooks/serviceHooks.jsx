@@ -1,24 +1,27 @@
-import React, { 
+import { 
     useEffect, 
     useState, 
     useCallback,
     useMemo } from 'react'
 
 
-export const useService = ({ url }) => {    
+export const useService = ({ url, method = 'GET' }) => {    
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState(null)
     
-    const fetcher = useMemo(
-        () => () => fetch(url).then(res => res.json()),
-        [url])
+    const fetcher = useCallback(
+        (body) => fetch(url, { 
+            method, 
+            body: body ? JSON.stringify(body) : undefined 
+        }).then(res => res.json()),
+        [url, method])
 
     var service = useCallback(
-        () => {
+        (body) => {
             setLoading(true)
-            fetcher().then(res => {
-                setLoading(false)
+            fetcher(body).then(res => {
                 setData(res)
+                setLoading(false)
             })
         },
         [fetcher])
@@ -35,5 +38,5 @@ export const useData = ({ url }) => {
     
     useEffect(() => service(), [url])
 
-    return [data, loading]
+    return [data, data === null || loading]
 }

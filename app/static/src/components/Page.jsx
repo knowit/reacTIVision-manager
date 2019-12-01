@@ -3,7 +3,7 @@ import { Container, Row, Col } from '../components/Grid'
 import { LoadingButton } from '../components/Button'
 import { useService } from '../hooks/serviceHooks'
 import { useRunningStatus } from '../hooks/statusHooks'
-import { RunningStatusProvider } from '../contexts/ServerStatus'
+import { RunningStatusProvider } from './ServerStatus'
 import Nav from '../components/Nav'
 
 const ServerStatusLabel = ({ running }) => running 
@@ -38,14 +38,14 @@ const SideBar = () => {
                 <LoadingButton 
                     disabled={startServerLoading || stopServerLoading || running}
                     loading={startServerLoading}
-                    onClick={startServer}>
+                    onClick={() => startServer()}>
                     Start
                 </LoadingButton>
                 <LoadingButton 
                     disabled={startServerLoading || stopServerLoading || !running}
                     loading={stopServerLoading}
                     color={"secondary"}
-                    onClick={stopServer}>
+                    onClick={() => stopServer()}>
                     Stop
                 </LoadingButton>
             </Col>

@@ -154,3 +154,4 @@ dmypy.json
 .pyre/
 
 .vscode
+.pid

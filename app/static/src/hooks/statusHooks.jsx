@@ -1,8 +1,8 @@
-import React, { 
+import { 
     useEffect,
     useContext } from 'react'
 import { useService } from './serviceHooks'
-import { RunningContext } from '../contexts/ServerStatus'
+import { RunningContext } from '../components/ServerStatus'
 
 export const useRunningStatus = () => {
     const context = useContext(RunningContext)
@@ -13,7 +13,7 @@ export const useRunningStatus = () => {
 }
 
 export const useServerStatus = () => {
-    const [service, loading, data] = useService({ url: '/api/server/status' })
+    const [service, _, data] = useService({ url: '/api/server/status' })
 
     useEffect(
         () => {
@@ -24,9 +24,9 @@ export const useServerStatus = () => {
             cb()
         },
         [])
-
+    
     return [
-        loading || !data ? false : data.running,
+        data ? data.running : false,
         service
     ]
 }
