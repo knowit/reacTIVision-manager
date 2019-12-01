@@ -26,20 +26,26 @@ const SettingsForm = ({ settings }) => {
 
             <FormList name="connections" label="Connections" items={settings.connections}>
                 {connection => (
-                    <>
-                        <TextField name="host" label="Host" initialValue={connection.host}/>
-                        <TextField name="port" label="Port" initialValue={connection.port}/>
-                        <SelectField 
-                            label="Type" 
-                            name="protocol" 
-                            initialValue={connection.protocol} 
-                            items={[
-                                {label: "UDP", value: "udp"},
-                                {label: "TCP", value: "tcp"},
-                                {label: "Web Socket", value: "web"},
-                                {label: "Flash", value: "flc"}
-                            ]} />
-                    </>
+                    <Row>
+                        <Col size={4}>
+                            <TextField name="host" label="Host" initialValue={connection.host}/>
+                        </Col>
+                        <Col size={4}>
+                            <TextField name="port" label="Port" initialValue={connection.port}/>
+                        </Col>
+                        <Col size={4}>
+                            <SelectField 
+                                label="Type" 
+                                name="protocol" 
+                                initialValue={connection.protocol} 
+                                items={[
+                                    {label: "UDP", value: "udp"},
+                                    {label: "TCP", value: "tcp"},
+                                    {label: "Web Socket", value: "web"},
+                                    {label: "Flash", value: "flc"}
+                                ]} />
+                        </Col>
+                    </Row>
                 )}
             </FormList>
 

@@ -103,6 +103,7 @@ export const CheckboxField = ({
                 type="checkbox" 
                 disabled={options.readonly || readonly}
                 value={currentValue}
+                checked={currentValue}
                 onChange={() => options.onChange(name, !currentValue)}/>
             <label className="form-check-label">
                 {label}
@@ -179,7 +180,7 @@ export const FormList = ({
         <FormContext.Provider value={context}>
             <h4>{label}</h4>
             {items.map((x, i) => (
-                <FormGroup key={i} name={i} label={i}>
+                <FormGroup key={i} name={i}>
                     {factory(x)}
                 </FormGroup>
             ))}

@@ -13,9 +13,15 @@ def get_settings():
 
 
 @blueprint.route('/settings', methods=['POST'])
-def post_settings():
-	print(request)
-	return {}
+def post_settings():	
+	payload = request.json
+	return {
+		'saved': manager.save_settings(
+			app.config, 
+			fiducial=payload['fiducial'] if 'fiducial' in payload else None,
+			connections=payload['connections'] if 'connections' in payload else None,
+			camera=payload['camera'] if 'camera' in payload else None)
+	}
 
 
 @blueprint.route('/server/start')

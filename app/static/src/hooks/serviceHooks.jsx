@@ -12,7 +12,10 @@ export const useService = ({ url, method = 'GET' }) => {
     const fetcher = useCallback(
         (body) => fetch(url, { 
             method, 
-            body: body ? JSON.stringify(body) : undefined 
+            body: body ? JSON.stringify(body) : undefined,
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }).then(res => res.json()),
         [url, method])
 

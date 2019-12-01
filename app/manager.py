@@ -40,6 +40,9 @@ def is_running():
         return False
 
 
+
+
+
 def load_settings(config):
     xml = parse(config['SETTINGS_PATH'])
 
@@ -69,5 +72,44 @@ def load_settings(config):
     )
 
 
-def save_settings(settings: ReactSettings, config):
-    pass
+def save_settings(config, fiducial=None, connections=None, camera=None):
+    xml = parse(config['SETTINGS_PATH'])
+    root = xml.getElementsByTagName('reactivision')[0]
+
+    if fiducial:
+        fiducial_elm = xml.getElementsByTagName('fiducial')
+        fiducial_elm = fiducial_elm[0] if fiducial_elm.length > 0 else None
+        if not fiducial_elm:
+            fiducial_elm = xml.createElement('fiducial')
+            root.appendChild(fiducial_elm)
+        
+        if 'amoeba' in fiducial:
+            fiducial_elm.setAttribute('amoeba', fiducial['amoeba'])
+        if 'mirror'  in fiducial:
+            fiducial_elm.setAttribute('mirror', str(fiducial['mirror']).lower())
+        if 'yamaarashi'  in fiducial:
+            fiducial_elm.setAttribute('yamaarashi', str(fiducial['yamaarashi']).lower())
+
+    if connections:
+        tuio_tags = xml.getElementsByTagName('tuio')
+        for tag in tuio_tags:
+            root.removeChild(tag)
+        
+        for connection in connections:
+            new_tag = xml.createElement('tuio')
+
+            if 'protocol' in connection:
+                new_tag.setAttribute('type', connection['protocol'])
+            if 'host' in connection:
+                new_tag.setAttribute('host', connection['host'])
+            if 'port' in connection:
+                new_tag.setAttribute('port', str(connection['port']))
+
+            root.appendChild(new_tag)
+
+    with open(config['SETTINGS_PATH'], 'w') as xmlFile:
+        xml.writexml(xmlFile)
+
+    return True
+
+
