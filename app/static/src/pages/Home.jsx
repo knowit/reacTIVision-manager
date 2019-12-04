@@ -62,6 +62,15 @@ const SettingsForm = ({ settings }) => {
                 <CheckboxField label="Mirror" name="mirror" initialValue={settings.fiducial.mirror} />
                 <CheckboxField label="Use Yamaarashi" name="yamaarashi" initialValue={settings.fiducial.yamaarashi} />
             </FormGroup>
+
+            <FormGroup name="calibration" label="Calibration Settings">
+                <SelectField 
+                    label="Use calibration" 
+                    name="file" 
+                    initialValue={settings.calibration.file} 
+                    items={{ url: '/api/calibration', root: 'calibrations' }} />
+            </FormGroup>
+
             <Submit label="Save" />
         </Form>
     )

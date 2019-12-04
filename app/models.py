@@ -33,9 +33,13 @@ class FiducialSettings:
     yamaarashi: bool = False
     mirror: bool = False
 
+@dataclass
+class CalibrationSettings:
+    file: str = 'default.grid'
 
 @dataclass
 class ReactSettings:
     connections: List[Connection]
     camera: CameraSettings
     fiducial: FiducialSettings
+    calibration: CalibrationSettings

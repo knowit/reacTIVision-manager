@@ -36,6 +36,27 @@ export const useValue = (name, initial) => {
     return form && (name in form) ? form[name] : initial
 }
 
+export const useOptionValues = (options) => {
+    const [listValues, setListValues] = useState([])
+
+    useEffect(
+        () => {
+            if (Array.isArray(options)) {
+                setListValues(options)
+                return
+            }
+            const { url, root } = options;
+            fetch(url)
+                .then(res => res.json())
+                .then(res => {
+                    setListValues(res[root])
+                })
+        },
+        [options])
+
+    return listValues
+}
+
 export const useOptions = () => {
     const { options } = useContext(FormContext)
     return options

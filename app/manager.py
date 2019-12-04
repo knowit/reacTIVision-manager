@@ -2,7 +2,9 @@ import xml.dom.minidom
 from xml.dom.minidom import parse
 import psutil
 from subprocess import signal
-from app.models import ReactSettings, CameraSettings, Amoeba, Connection, FiducialSettings
+import glob
+import os
+from app.models import ReactSettings, CameraSettings, Amoeba, Connection, FiducialSettings, CalibrationSettings
 
 
 def start_server(config):
@@ -53,8 +55,12 @@ def load_settings(config):
     # TODO: camera settings
 
     tuio_tags = xml.getElementsByTagName('tuio')
+    
     fiducial = xml.getElementsByTagName('fiducial')
     fiducial = fiducial[0] if fiducial.length > 0 else None
+
+    calibration = xml.getElementsByTagName('calibration')
+    calibration = calibration[0] if calibration.length > 0 else None
 
     return ReactSettings(
         connections = [
@@ -68,7 +74,10 @@ def load_settings(config):
             amoeba=fiducial.getAttribute('amoeba'),
             yamaarashi=True if fiducial.getAttribute('yamaarashi') == 'true' else False,
             mirror=True if fiducial.getAttribute('mirror') == 'true' else False
-        ) if fiducial else FiducialSettings()
+        ) if fiducial else FiducialSettings(),
+        calibration = CalibrationSettings(
+            file=calibration.getAttribute('file'),
+        ) if calibration else CalibrationSettings()
     )
 
 
@@ -114,4 +123,31 @@ def save_settings(config, fiducial=None, connections=None, camera=None):
 
     return True
 
+
+def list_calibration_files(config):
+    base_path = config['REACTIVISION_PATH']
+    return [
+        { 'file': os.path.basename(x), 'full_path': x }
+        for x in glob.glob(os.path.join(base_path, '*.grid'))
+    ]
+
+
+def load_calibration(name, config):
+    calibration_files = list_calibration_files(config)
+    calibration = next((x for x in calibration_files if name in x['file']), None)
+    if not calibration:
+        return None
+    with open(calibration['full_path'], 'r') as file:
+        return file.read() 
+    
+
+def save_calibration(name, writer, config):
+    base_path = config['REACTIVISION_PATH']
+    full_path = os.path.join(base_path, name if name.endswith('.grid') else f'{name}.grid')
+
+    with open(full_path, 'w') as f:
+        for line in writer:
+            f.write(line)
+    
+    return True
 

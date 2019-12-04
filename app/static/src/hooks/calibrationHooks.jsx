@@ -1,6 +1,8 @@
 import { 
     useRef,
     useLayoutEffect,
+    useEffect,
+    useState,
     useMemo } from 'react';
 import { calibrationGrid } from '../calibrationGrid'
 
@@ -58,10 +60,19 @@ const useGrid = (width, height) => {
     return grid
 } 
 
-export const useCalibrationGrid = (width, height) => {
-    const grid = useMemo(
-        () => calibrationGrid(width, height),
-        [width, height])
+export const useCalibrationGrid = (width, height, name) => {
+    const [grid, setGrid] = useState(calibrationGrid(width, height))
+
+    useEffect(
+        () => {
+            if (!(name === 'default' || name === 'default.grid')) {
+                fetch(`/api/calibration/${name}`)
+                    .then(res => res.json())
+                    .then(res => setGrid(calibrationGrid(width, height, res['calibration'])))
+            }
+        },
+        [])
+
     return grid
 }
 
@@ -84,4 +95,11 @@ export const useCalibrationRender = (width, height, calibrationGrid) => {
     return [
         canvasRef
     ]
+}
+
+export const useCameraSettings = () => {
+    return {
+        width: 680,
+        height: 420
+    }
 }

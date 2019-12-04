@@ -5,7 +5,7 @@ import React, {
 import Page from '../components/Page'
 import { Row, Col } from '../components/Grid'
 import { LoadingButton } from '../components/Button'
-import { useCalibrationRender, useCalibrationGrid } from '../hooks/calibrationHooks'
+import { useCalibrationRender, useCalibrationGrid, useCameraSettings } from '../hooks/calibrationHooks'
 
 const Video = ({ width, height }) => 
     <img 
@@ -32,14 +32,13 @@ const Canvas = forwardRef(
             height={height}/>
     })
 
-const CalibrateRender = ({ width, height }) => {
-    const calibrationGrid = useCalibrationGrid(width, height)
-    const [ canvasRef ] = useCalibrationRender(width, height, calibrationGrid)
+const CalibrateRender = ({ width, height, grid }) => {
+    const [ canvasRef ] = useCalibrationRender(width, height, grid)
 
     return (
         <Row>
             <Col size={12}>
-                <div style={{width: width, height: height}}>
+                <div style={{width, height}}>
                     <Canvas ref={canvasRef} width={width} height={height}/>
                     <Video width={width} height={height}/>
                 </div>
@@ -48,12 +47,16 @@ const CalibrateRender = ({ width, height }) => {
     )
 }
 
-const Calibrate = () => {
+
+const CalibrateSession = ({ name }) => {
+    const { width, height } = useCameraSettings()
+    const grid = useCalibrationGrid(width, height, name)
+
     return (
-        <Page>
+        <>
             <Row>
                 <Col>
-                    <CalibrateRender width={680} height={420} />
+                    <CalibrateRender width={width} height={height} grid={grid} />
                 </Col>
             </Row>
             <Row>
@@ -68,6 +71,16 @@ const Calibrate = () => {
                     </LoadingButton>
                 </Col>
             </Row>
+        </>
+    )
+}
+
+
+
+const Calibrate = () => {
+    return (
+        <Page>
+            <CalibrateSession name={"test"}/>
         </Page>
     );
 }

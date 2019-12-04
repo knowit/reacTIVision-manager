@@ -5,7 +5,8 @@ import { LoadingButton } from './Button'
 import { 
     useValue, 
     useOptions, 
-    useForm } from '../hooks/formHooks'
+    useForm,
+    useOptionValues } from '../hooks/formHooks'
 
 export const FormContext = createContext()
 
@@ -121,6 +122,7 @@ export const SelectField = ({
 }) => {
     const options = useOptions()
     const currentValue = useValue(name, initialValue)
+    const optionsList = useOptionValues(items)
 
     return (
         <div className="form-group">
@@ -131,7 +133,7 @@ export const SelectField = ({
                 value={currentValue}
                 onChange={({target: { value }}) => options.onChange(name, value)}>
                     
-                {items.map(i => <option key={i.value} value={i.value}>{i.label || i.value}</option>)}
+                {optionsList.map(i => <option key={i.value} value={i.value}>{i.label || i.value}</option>)}
             </select>
         </div>
     )

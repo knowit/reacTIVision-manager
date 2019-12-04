@@ -5,7 +5,9 @@ blueprint = Blueprint('calibrate',__name__)
 
 # TODO web socket / socket.io
 @blueprint.route('/stream')
-def video_stream(width=640, height=480):
+def video_stream():
+    width = request.args.get('width', default=640, type=int)
+    height = request.args.get('height', default=480, type=int)
     def next_frame(camera):
         while True:
             frame = get_frame(camera)

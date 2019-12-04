@@ -51,7 +51,8 @@ const lerpY = (x, y, points) => {
 }
 
 
-export const calibrationGrid = (width, height) => {
+export const calibrationGrid = (width, height, loadedPoints=[]) => {
+    console.log(loadedPoints)
     const points = new Array(width+1)
         .fill(new Array(height+1)
             .fill({ x: 0, y: 0 }))
